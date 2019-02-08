@@ -85,7 +85,6 @@ class ViewTeam extends Component {
                   />
                 </React.Fragment>
               ) : null}
-              }
             </AppLayout>
           );
         }}

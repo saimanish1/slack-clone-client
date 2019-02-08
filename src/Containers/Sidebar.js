@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import decode from 'jwt-decode';
 import Teams from '../components/Teams';
 import Channels from '../components/Channels';
 import AddChannelModal from '../components/AddChannelModal';

@@ -41,7 +41,7 @@ class DirectMessageModal extends Component {
     );
   };
   render() {
-    let { open, onClose, currentTeamId } = this.props;
+    let { open, onClose } = this.props;
     return (
       <Modal open={open} onClose={onClose}>
         <Modal.Header>Add Channel</Modal.Header>

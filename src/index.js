@@ -80,8 +80,8 @@ const uploadLink = createUploadLink({ uri: 'http://localhost:4000' });
 const httpLinkWithMiddleWare = ApolloLink.from([
   authLink,
   afterwareLink,
-  uploadLink,
   errorLink,
+  uploadLink,
   httpLink,
 ]);
 

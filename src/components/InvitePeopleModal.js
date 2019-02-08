@@ -14,7 +14,7 @@ const ADD_MEMBER = gql`
 
 class InvitePeopleModal extends Component {
   state = {
-    email: 'frdd@test.com',
+    email: '',
   };
   onChangeEmailHandler = e => {
     this.setState({ email: e.target.value });

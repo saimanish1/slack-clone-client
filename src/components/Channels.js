@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const ChannelWrapper = styled.div`
   grid-column: 2;
   grid-row: 1 / 4;
-  background-color: #4e3a4c;
+  background-color: #3f0e40;
   color: #958993;
 `;
 
@@ -66,7 +66,7 @@ export default ({
   userName,
   channels,
   users,
-  onAddChannelClick,
+  onAddChannelClick /**/,
   teamId,
   onInvitePeopleClick,
   isOwner,

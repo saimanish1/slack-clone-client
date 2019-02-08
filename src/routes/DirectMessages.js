@@ -40,7 +40,7 @@ class DirectMessages extends Component {
           if (loading) return <p>Loading...</p>;
           if (error) return <p> Error Occurred</p> || console.log(error);
           console.log(me);
-          const { teams, username, id } = me;
+          const { teams, username } = me;
           if (!teams.length) {
             return <Redirect to={'/createteam'} />;
           }

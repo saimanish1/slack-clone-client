@@ -14,6 +14,7 @@ import CreateTeam from './routes/CreateTeam';
 import ViewTeam from './routes/ViewTeam';
 import DirectMessages from './routes/DirectMessages';
 import UploadOneFile from './routes/UploadTest';
+import NotFound from './components/NotFound';
 
 const isAuthenticated = () => {
   const token = localStorage.getItem('token');
@@ -61,6 +62,7 @@ class App extends React.Component {
             component={DirectMessages}
           />
           <PrivateRoute path="/createteam" exact component={CreateTeam} />
+          <Route component={NotFound} />
         </Switch>
       </Router>
     );

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const TeamWrapper = styled.div`
   grid-column: 1;
   grid-row: 1 / 4;
-  background-color: #362234;
+  background-color: #3f0e40;
   color: #958993;
 `;
 

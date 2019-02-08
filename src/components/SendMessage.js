@@ -59,12 +59,12 @@ class SendMessage extends Component {
     createMessage
   ) => {
     if (validity.valid) {
-      console.log(file);
-      console.log(createMessage);
       const response = await createMessage({
         variables: { file, channelId: this.props.channelId },
       });
-      // console.log(response);
+      if (!response) {
+        alert('Error Occured while Submitting message');
+      }
     }
   };
   render() {
