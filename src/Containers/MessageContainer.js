@@ -4,7 +4,7 @@ import { Comment } from 'semantic-ui-react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import moment from 'moment';
-import styled from 'styled-components';
+
 const MESSAGES_QUERY = gql`
   query MESSAGES_QUERY($channelId: ID!) {
     messages(channelId: $channelId) {

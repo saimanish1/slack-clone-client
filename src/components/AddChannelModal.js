@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
-import { Button, Form, Input, Modal, Checkbox } from 'semantic-ui-react';
+// import { Button, Form, Input, Modal, Checkbox } from 'semantic-ui-react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { ME_QUERY } from '../routes/ViewTeam';
 
 const CREATE_CHANNEL_MUTATION = gql`
@@ -23,6 +29,11 @@ class AddChannelModal extends Component {
   onChangeChannelNameHandler = e => {
     this.setState({ channelName: e.target.value });
   };
+  submit = async (createChannel, e) => {
+    await createChannel();
+    this.setState({ channelName: '' });
+    this.props.onClose();
+  };
   render() {
     let { open, onClose, currentTeamId } = this.props;
     return (
@@ -39,53 +50,39 @@ class AddChannelModal extends Component {
           if (error) return <p>Error Occured</p> || console.log(error);
 
           return (
-            <Modal open={open} onClose={onClose}>
-              <Modal.Header>Add Channel</Modal.Header>
-              <Modal.Content>
-                <Form
-                  onSubmit={async e => {
-                    e.preventDefault();
-                    if (this.state.channelName.trim().length > 0) {
-                      if (!(await createChannel())) {
-                        alert('Error Occurred');
-                      }
-                      this.setState({ channelName: '' });
-                      onClose();
-                    }
-                  }}
+            <Dialog
+              open={open}
+              onClose={onClose}
+              aria-labelledby="form-dialog-title"
+              maxWidth={'sm'}
+              fullWidth
+            >
+              <DialogTitle id="form-dialog-title">Create a Channel</DialogTitle>
+              <DialogContent>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Channel Name"
+                  type="text"
+                  value={this.state.channelName}
+                  fullWidth
+                  onChange={this.onChangeChannelNameHandler}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={onClose} color="primary">
+                  Cancel
+                </Button>
+                <Button
+                  onClick={e => this.submit(createChannel, e)}
+                  color="primary"
+                  disabled={!this.state.channelName.length > 0}
                 >
-                  <Form.Field>
-                    <Input
-                      fluid
-                      placeholder={'channel name'}
-                      value={this.state.channelName}
-                      onChange={this.onChangeChannelNameHandler}
-                    />
-                  </Form.Field>
-                  <Form.Field>
-                    <Checkbox
-                      label={'Private'}
-                      checked={this.state.public}
-                      onChange={e => {
-                        this.setState(state => ({ public: !state.public }));
-                      }}
-                    />
-                  </Form.Field>
-                  <Form.Group widths={'equal'}>
-                    <Button
-                      fluid
-                      type={'submit'}
-                      disabled={this.state.channelName.trim().length < 1}
-                    >
-                      Creat{loading ? 'ing' : 'e Channel'}
-                    </Button>
-                    <Button fluid onClick={onClose}>
-                      Cancel
-                    </Button>
-                  </Form.Group>
-                </Form>
-              </Modal.Content>
-            </Modal>
+                  create
+                </Button>
+              </DialogActions>
+            </Dialog>
           );
         }}
       </Mutation>
