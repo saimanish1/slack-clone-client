@@ -15,6 +15,7 @@ import ViewTeam from './routes/ViewTeam';
 import DirectMessages from './routes/DirectMessages';
 import UploadOneFile from './routes/UploadTest';
 import NotFound from './components/NotFound';
+import Signup from './components/Signup';
 
 const isAuthenticated = () => {
   const token = localStorage.getItem('token');
@@ -49,6 +50,7 @@ class App extends React.Component {
           <Route path="/register" exact component={Register} />
           <Route path="/login" exact component={Login} />
           <Route path="/upload" exact component={UploadOneFile} />
+          <Route path="/testing" exact component={Signup} />
           {/*this is a test uploading*/}
 
           <PrivateRoute

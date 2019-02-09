@@ -1,8 +1,17 @@
 import React, { Component } from 'react';
-import { Container, Header, Input, Button, Message } from 'semantic-ui-react';
+// import { Container, Header, Input, Button, Message } from 'semantic-ui-react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { Link } from 'react-router-dom';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import FormControl from '@material-ui/core/FormControl';
+import { TextField } from '@material-ui/core';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import withStyles from '@material-ui/core/styles/withStyles';
 
 const REGISTER_MUTATION = gql`
   mutation($username: String!, $email: String!, $password: String!) {
@@ -15,6 +24,39 @@ const REGISTER_MUTATION = gql`
     }
   }
 `;
+
+const styles = theme => ({
+  main: {
+    width: 'auto',
+    display: 'block', // Fix IE 11 issue.
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3,
+    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+      width: 400,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    },
+  },
+  paper: {
+    marginTop: theme.spacing.unit * 8,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
+      .spacing.unit * 3}px`,
+  },
+  avatar: {
+    margin: theme.spacing.unit,
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing.unit,
+  },
+  submit: {
+    marginTop: theme.spacing.unit * 3,
+  },
+});
 
 class Register extends Component {
   state = {
@@ -29,7 +71,9 @@ class Register extends Component {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
-  onSubmit = async registerUser => {
+  onSubmit = async (registerUser, e) => {
+    e.preventDefault();
+    console.log(this.state);
     this.setState({
       usernameError: null,
       passwordError: null,
@@ -64,6 +108,7 @@ class Register extends Component {
       emailError,
       passwordError,
     } = this.state;
+    const { classes } = this.props;
 
     const errorsList = [];
     if (usernameError) {
@@ -87,49 +132,72 @@ class Register extends Component {
       >
         {(registerUser, { loading, error, called }) => {
           return (
-            <Container text>
-              {called && <p>Registered</p>}
-              <Link to={'/'}>Home</Link>
-              <Header as="h2">Register</Header>
-              <Input
-                fluid
-                placeholder="Username"
-                value={username}
-                name="username"
-                onChange={this.onChangeInputHandler}
-                error={usernameError ? true : false}
-              />
-              <Input
-                fluid
-                placeholder="Email"
-                value={email}
-                name={'email'}
-                onChange={this.onChangeInputHandler}
-                error={emailError ? true : false}
-              />
-              <Input
-                fluid
-                placeholder="Password"
-                type={'password'}
-                value={password}
-                name={'password'}
-                onChange={this.onChangeInputHandler}
-                error={passwordError ? true : false}
-              />
-              <Button
-                onClick={() => this.onSubmit(registerUser)}
-                disabled={loading}
-              >
-                Submit{loading ? 'ing' : ''}
-              </Button>
-              {usernameError || emailError || passwordError ? (
-                <Message
-                  error
-                  headers={'There was some error with your submission'}
-                  list={errorsList}
-                />
-              ) : null}
-            </Container>
+            <main className={classes.main}>
+              <CssBaseline />
+              <Paper className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                  <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                  Sign in
+                </Typography>
+                <form
+                  className={classes.form}
+                  onSubmit={e => this.onSubmit(registerUser, e)}
+                >
+                  <FormControl margin="normal" required fullWidth>
+                    <TextField
+                      id="username"
+                      name="username"
+                      label={'Username'}
+                      autoFocus
+                      onChange={this.onChangeInputHandler}
+                      value={username}
+                      variant="outlined"
+                      helperText={usernameError ? 'Invalid username' : null}
+                      error={!!usernameError}
+                    />
+                  </FormControl>
+                  <FormControl margin="normal" required fullWidth>
+                    <TextField
+                      id="email"
+                      name="email"
+                      label={'Email Address'}
+                      autoComplete="email"
+                      onChange={this.onChangeInputHandler}
+                      value={email}
+                      variant="outlined"
+                      helperText={emailError ? 'Email is Invalid' : null}
+                      error={!!emailError}
+                    />
+                  </FormControl>
+                  <FormControl margin="normal" required fullWidth>
+                    <TextField
+                      name="password"
+                      type="password"
+                      id="password"
+                      label={'Password'}
+                      autoComplete="current-password"
+                      value={password}
+                      onChange={this.onChangeInputHandler}
+                      variant="outlined"
+                      error={!!passwordError}
+                      helperText={passwordError ? 'Password is invalid' : null}
+                    />
+                  </FormControl>
+
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                  >
+                    Sign in
+                  </Button>
+                </form>
+              </Paper>
+            </main>
           );
         }}
       </Mutation>
@@ -137,4 +205,4 @@ class Register extends Component {
   }
 }
 
-export default Register;
+export default withStyles(styles)(Register);
