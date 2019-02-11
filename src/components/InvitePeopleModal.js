@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
-import { Button, Form, Input, Modal } from 'semantic-ui-react';
+// import { Button, Form, Input, Modal } from 'semantic-ui-react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { ME_QUERY } from '../routes/ViewTeam';
 
 const ADD_MEMBER = gql`
@@ -19,6 +25,11 @@ class InvitePeopleModal extends Component {
   onChangeEmailHandler = e => {
     this.setState({ email: e.target.value });
   };
+  submit = async addTeamMember => {
+    await addTeamMember();
+    this.setState({ email: '' });
+    this.props.onClose();
+  };
   render() {
     let { open, onClose, teamId } = this.props;
 
@@ -35,54 +46,39 @@ class InvitePeopleModal extends Component {
           if (error) return <p>Error Occured</p> || console.log(error);
 
           return (
-            <Modal open={open} onClose={onClose}>
-              <Modal.Header>Invite</Modal.Header>
-              <Modal.Content>
-                <Form
-                  onSubmit={async e => {
-                    e.preventDefault();
-                    if (this.state.email.trim().length > 0) {
-                      try {
-                        const res = await addTeamMember();
-                        console.log(res);
-                        if (!res) {
-                          alert('Error Occurred');
-                        }
-                        this.setState({ email: '' });
-                        onClose();
-                      } catch (err) {
-                        this.setState({ email: '' });
-
-                        alert('Error Occurred');
-
-                        onClose();
-                      }
-                    }
-                  }}
+            <Dialog
+              open={open}
+              onClose={onClose}
+              aria-labelledby="form-dialog-title"
+              maxWidth={'sm'}
+              fullWidth
+            >
+              <DialogTitle id="form-dialog-title">Invite People</DialogTitle>
+              <DialogContent>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Email Address"
+                  type="text"
+                  value={this.state.email}
+                  fullWidth
+                  onChange={this.onChangeEmailHandler}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={onClose} color="primary">
+                  Cancel
+                </Button>
+                <Button
+                  onClick={e => this.submit(addTeamMember, e)}
+                  color="primary"
+                  disabled={!this.state.email.length > 0}
                 >
-                  <Form.Field>
-                    <Input
-                      fluid
-                      placeholder={'emailId of the user'}
-                      value={this.state.email}
-                      onChange={this.onChangeEmailHandler}
-                    />
-                  </Form.Field>
-                  <Form.Group widths={'equal'}>
-                    <Button
-                      fluid
-                      type={'submit'}
-                      disabled={this.state.email.trim().length < 1}
-                    >
-                      Invit{loading ? 'ing' : 'e Team'}
-                    </Button>
-                    <Button fluid onClick={onClose}>
-                      Cancel
-                    </Button>
-                  </Form.Group>
-                </Form>
-              </Modal.Content>
-            </Modal>
+                  Invite
+                </Button>
+              </DialogActions>
+            </Dialog>
           );
         }}
       </Mutation>

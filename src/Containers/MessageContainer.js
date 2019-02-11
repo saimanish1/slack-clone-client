@@ -64,6 +64,7 @@ const Message = ({ message: { url, text, filetype } }) => {
 let unsubscribe = null;
 
 class MessageContainer extends Component {
+  _;
   componentWillReceiveProps(nextProps, nextContext) {
     if (this.props.channelId !== nextProps.channelId) {
       if (unsubscribe) {
@@ -75,6 +76,8 @@ class MessageContainer extends Component {
   shouldComponentUpdate(nextProps, nextState, nextContext) {
     return this.props.channelId !== nextProps.channelId;
   }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {}
 
   componentWillUnmount() {
     if (unsubscribe) {
@@ -142,9 +145,7 @@ class MessageContainer extends Component {
                             <span>
                               {this.displayingDate(Number(m.created_at))}{' '}
                             </span>
-                            {moment(Number(m.created_at))
-                              .utcOffset(530)
-                              .format('h:mm A')}
+                            {moment(Number(m.created_at)).format('h:mm A')}
                           </div>
                         </Comment.Metadata>
                         <Message message={m} />

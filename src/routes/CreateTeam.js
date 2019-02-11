@@ -96,6 +96,7 @@ class CreateTeam extends Component {
       this.setState({
         name: '',
       });
+      this.props.history.push(`/view-team/${team.id}`);
     } else {
       const err = {};
       errors.forEach(({ path, message }) => {
@@ -109,11 +110,6 @@ class CreateTeam extends Component {
   render() {
     const { name, nameError } = this.state;
     const { classes } = this.props;
-
-    const errorsList = [];
-    if (nameError) {
-      errorsList.push(nameError);
-    }
 
     return (
       <Mutation
